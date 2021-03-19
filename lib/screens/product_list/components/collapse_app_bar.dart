@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pexels/screens/components/components.dart';
 
 class CollapseAppBar extends StatelessWidget {
-  const CollapseAppBar({Key key}) : super(key: key);
+  final String imageUrl;
+  const CollapseAppBar({Key key, this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +32,20 @@ class CollapseAppBar extends StatelessWidget {
               children: [
                 AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: top == MediaQuery.of(context).padding.top + kToolbarHeight ? 1.0 : 0.0,
+                  opacity:
+                      top == MediaQuery.of(context).padding.top + kToolbarHeight
+                          ? 1.0
+                          : 0.0,
                   child: Text(
                     "Pexels App",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    ),
+                    style: PexelTextStyle.titleStyle(),
                   ),
                 ),
               ],
             ),
-            background: Image.network(
-              "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
-              fit: BoxFit.cover,
+            background: AppNetworkImage(
+              imageUrl:
+                  "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
             ),
           );
         },

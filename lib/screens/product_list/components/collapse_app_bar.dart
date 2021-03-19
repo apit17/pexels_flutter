@@ -30,7 +30,7 @@ class CollapseAppBar extends StatelessWidget {
               children: [
                 AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: top < 100 ? 1.0 : 0.0,
+                  opacity: top == MediaQuery.of(context).padding.top + kToolbarHeight ? 1.0 : 0.0,
                   child: Text(
                     "Pexels App",
                     style: TextStyle(

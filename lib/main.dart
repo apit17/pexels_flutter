@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pexels/screens/screens.dart';
+import 'package:pexels/services/service_locator.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(MyApp());
 }
 

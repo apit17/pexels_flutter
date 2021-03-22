@@ -6,7 +6,7 @@ import 'package:pexels/services/web_api/web_api_service.dart';
 import 'package:pexels/utils/response.dart';
 
 class ProductListProvider extends ChangeNotifier {
-  WebApi _webApi = serviceLocator<WebApi>();
+  WebApi webApi = serviceLocator<WebApi>();
 
   bool _isGridView = false;
   bool get isGridView => _isGridView;
@@ -16,22 +16,28 @@ class ProductListProvider extends ChangeNotifier {
   List<Photo> _photos;
   List<Photo> get photos => _photos;
 
+  Photo _cover;
+  Photo get cover => _cover;
+
+  int get photosCount => _photos != null ? _photos.length : 0;
+
+  int _page = 1;
+
   void _setResponseCase(Response response) {
     responseCase = response;
     notifyListeners();
   }
 
-  void loadPhotos() async {
+  Future loadPhotos() async {
     _setResponseCase(Response.loading<bool>());
     try {
-      final isInternet = await _webApi.isInternet();
+      final isInternet = await webApi.isInternet();
       if (isInternet) {
-        _webApi
-          .fetchPhotos()
-          .then((value) {
-            _photos = value;
-            _setResponseCase(Response.completed<bool>(true));
-          });
+        final value = await webApi.fetchPhotos();
+        _cover = value.first;
+        value.removeAt(0);
+        _photos = value;
+        _setResponseCase(Response.completed<bool>(true));
       } else {
         _setResponseCase(Response.error<bool>("No Internet Connection"));
       }
@@ -41,8 +47,17 @@ class ProductListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loadNextPhotos(int page) async {
-    _photos = await _webApi.fetchNextPhotos(page);
+  void loadNextPhotos() async {
+    final isInternet = await webApi.isInternet();
+    _page += 1;
+    if (isInternet) {
+      webApi.fetchNextPhotos(_page).then((value) {
+        _photos = value;
+        _setResponseCase(Response.completed<bool>(true));
+      });
+    } else {
+      _setResponseCase(Response.error<bool>("No Internet Connection"));
+    }
     notifyListeners();
   }
 

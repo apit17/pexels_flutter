@@ -20,7 +20,9 @@ class CollapseAppBar extends StatelessWidget {
                 color: provider.isGridView ? Colors.blueAccent : Colors.white,
               ),
               onPressed: () {
-                provider.changeView();
+                if (!provider.isGridView) {
+                  provider.changeView();
+                }
               },
             ),
             IconButton(
@@ -29,7 +31,9 @@ class CollapseAppBar extends StatelessWidget {
                 color: provider.isGridView ? Colors.white : Colors.blueAccent,
               ),
               onPressed: () {
-                provider.changeView();
+                if (provider.isGridView) {
+                  provider.changeView();
+                }
               },
             ),
           ],
@@ -61,7 +65,7 @@ class CollapseAppBar extends StatelessWidget {
                 ),
                 background: AppNetworkImage(
                   imageUrl:
-                      "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=350",
+                      provider.cover.src.largeImage,
                 ),
               );
             },

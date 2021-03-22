@@ -10,7 +10,7 @@ import 'package:pexels/services/web_api/web_api.dart';
 
 class WebApiService implements WebApi {
   final _host = "api.pexels.com";
-  final _path = "v1/photos";
+  final _path = "v1/curated";
   final Map<String, String> _headers = {
     "Accept": "application/json",
     "Authorization": apiKey,
@@ -23,7 +23,7 @@ class WebApiService implements WebApi {
     if (_photoCache == null) {
       try {
         print("get from web");
-        final parameter = {"per_page": "10"};
+        final parameter = {"per_page": "11"};
         final uri = Uri.https(_host, _path, parameter);
         final result = await http.get(uri, headers: _headers);
         final jsonObject = json.decode(result.body);
@@ -43,16 +43,19 @@ class WebApiService implements WebApi {
 
   @override
   Future<List<Photo>> fetchNextPhotos(int page) async {
-    if (_photoCache == null) {
-      print("get from web");
+    try {
       final parameter = {"per_page": "10", "page": "$page"};
       final uri = Uri.https(_host, _path, parameter);
       final result = await http.get(uri, headers: _headers);
       final jsonObject = json.decode(result.body);
       final photos = _createPhotosFromRawMap(jsonObject);
       _photoCache = _photoCache + photos;
-    } else {
-      print("get from cache");
+    } on SocketException {
+      throw Failure('No Internet connection');
+    } on HttpException {
+      throw Failure("Couldn't find the post");
+    } on FormatException {
+      throw Failure("Bad response format");
     }
     return _photoCache;
   }

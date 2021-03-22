@@ -24,7 +24,9 @@ dependencies:
   flutter:
     sdk: flutter
   cached_network_image: ^2.5.1
+  connectivity: ^3.0.3
   cupertino_icons: ^1.0.0
+  data_connection_checker: ^0.3.4
   equatable: ^2.0.0
   get_it: ^6.0.0
   http: ^0.13.1

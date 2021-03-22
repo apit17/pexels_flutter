@@ -43,6 +43,7 @@ class ProductGridItems extends StatelessWidget {
                         borderRadius: 10.0,
                       ),
                     ),
+                    SizedBox(height: 8),
                     Flexible(
                       child: Container(
                         child: Column(
